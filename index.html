@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Thirteenth Chime</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="wrap">
+  <div id="hud">
+    <span id="hud-loop">Loop 1</span>
+    <span id="hud-time">11:56:00 PM</span>
+    <span id="hud-left">4:00 until midnight</span>
+    <span class="hud-keys">E interact · J journal · H help</span>
+    <span id="hud-obj">Objective: Speak to the guests. Examine Edmund's statement.</span>
+  </div>
+  <div id="tip" class="hidden"><b>Next step</b><span id="tip-text"></span><span id="tip-note" class="hidden"></span><button id="tip-close" aria-label="Hide">×</button></div>
+  <div id="stage">
+    <canvas id="minimap" width="192" height="116"></canvas>
+    <div id="prompt" class="hidden"></div>
+    <div id="subtitle" class="hidden"></div>
+  </div>
+  <div id="touch">
+    <div class="pad">
+      <button data-key="up">▲</button>
+      <div><button data-key="left">◀</button><button data-key="down">▼</button><button data-key="right">▶</button></div>
+    </div>
+    <div class="acts">
+      <button id="btn-e">E · Interact</button>
+      <button id="btn-j">J · Journal</button>
+      <button id="btn-accuse">Accuse</button>
+      <button id="btn-h">H · Help</button>
+    </div>
+  </div>
+</div>
+
+<div id="dialog" class="panel hidden">
+  <div id="dlg-speaker"></div>
+  <div id="dlg-text"></div>
+  <div id="dlg-choices"></div>
+</div>
+
+<div id="journal" class="panel hidden">
+  <div class="tabs">
+    <button data-tab="evidence" class="active">Evidence</button>
+    <button data-tab="timeline">Timeline</button>
+    <button data-tab="accuse">Accusation</button>
+    <button id="jn-close">Close (Esc)</button>
+  </div>
+  <div id="jn-body"></div>
+</div>
+
+<div id="help" class="panel hidden">
+  <h3>How to play</h3>
+  <p><b>Goal.</b> Someone poisons Sir Edmund before midnight. Find out who, prove it, and break the time loop.</p>
+  <p><b>Controls.</b> WASD / arrow keys to walk · <b>E</b> to talk or examine when a prompt appears · <b>J</b> journal · <b>H</b> this help · <b>Esc</b> close. Reading, talking and the journal pause the clock.</p>
+  <p><b>The loop.</b> Each loop runs from 11:56 to midnight (four minutes). Then the clock strikes thirteen and everything resets. You keep your journal — evidence and everything you saw. Everyone else forgets and repeats the same routine. Items you picked up go back where they were.</p>
+  <p><b>The rival.</b> The murderer also remembers the loops. He learns only what he sees you do, or what you show him. If he catches you investigating, he changes his plan next loop. Investigate quietly.</p>
+  <p><b>Saving Edmund.</b> You can stop the poisoning: take the vial before it is used, interrupt the attempt, or take the glass away.</p>
+  <p><b>Proving it.</b> Journal → Accusation. Choose the suspect, a <i>motive</i> (why tonight) and an <i>action</i> (evidence they actually did it). Owning a suspicious object is not proof.</p>
+  <p><b>On screen.</b> Gold figure = you. Floating <b>?</b> = worth examining. Glowing ring = what E will interact with.</p>
+  <button id="help-tutorial">Replay the tutorial</button>
+  <button id="help-close">Close (Esc)</button>
+</div>
+
+<div id="tutorial" class="hidden">
+  <div id="tut-box">
+    <section class="tut-page">
+      <div class="tut-kicker">Blackthorn Hall · North Yorkshire · 11:56 PM</div>
+      <h2>The Thirteenth Chime</h2>
+      <p class="tut-quote">Twelve years ago, a young man died at Blackthorn Hall.<br>Tonight, someone intends to tell the truth.<br>Someone else intends to stop him.</p>
+      <p>A storm has cut the house off. At midnight, <b>Sir Edmund Blackthorn</b> will sign a statement admitting that the death of Daniel Price was covered up.</p>
+      <p>You are <b>Morgan</b>, a private investigator hired to witness it. Before midnight, someone will poison him.</p>
+    </section>
+    <section class="tut-page">
+      <h2>Who's in the house</h2>
+      <div class="cast">
+        <div class="card"><i style="background:#5a2a2a"></i><b>Sir Edmund Blackthorn</b><span>The host. Signs his statement at midnight — if he lives.</span></div>
+        <div class="card"><i style="background:#2f3d55"></i><b>Julian Ashcroft</b><span>The family solicitor. Courteous, helpful, always nearby.</span></div>
+        <div class="card"><i style="background:#1e1e22"></i><b>Thomas Reed</b><span>The butler. Prepares Edmund's evening drink.</span></div>
+        <div class="card"><i style="background:#8c2f45"></i><b>Clara Blackthorn</b><span>Edmund's niece. The new will costs her dearly.</span></div>
+        <div class="card"><i style="background:#4f7f6a"></i><b>Dr Helen Ward</b><span>The family doctor. Has access to medicines.</span></div>
+      </div>
+      <p class="tut-quote">Everyone is hiding something. That does not mean everyone is a murderer.</p>
+    </section>
+    <section class="tut-page">
+      <h2>How to win — three steps</h2>
+      <ol class="steps">
+        <li><b>Find the motive.</b> Read Edmund's statement on his desk in the Study. Who does it expose?</li>
+        <li><b>Catch the act.</b> Someone poisons Edmund's drink on the Study drink table just before midnight. See it with your own eyes.</li>
+        <li><b>Accuse.</b> Press the <b>Accuse</b> button and choose the <i>suspect</i>, the <i>motive</i> evidence and the <i>action</i> evidence. Suspicion is not enough — you need proof of both.</li>
+      </ol>
+      <p><b>Bonus:</b> save Edmund. After you see the poisoning, take the glass from the drink table before he drinks it.</p>
+    </section>
+    <section class="tut-page">
+      <h2>The time loop</h2>
+      <ul class="rules">
+        <li>Each loop lasts <b>four minutes</b>: 11:56 to midnight.</li>
+        <li>At midnight the clock strikes <b>thirteen</b> and everything starts again at 11:56.</li>
+        <li><b>You keep</b> your journal: every clue and everything you saw.</li>
+        <li><b>Everyone else forgets</b> and repeats exactly the same routine — so you can learn it.</li>
+        <li>Objects you picked up go back where they were.</li>
+        <li>You cannot be everywhere at once. Use each loop to watch somewhere new.</li>
+        <li>Reading and talking <b>pause the clock</b>.</li>
+      </ul>
+    </section>
+    <section class="tut-page">
+      <h2>Someone else remembers</h2>
+      <p class="tut-quote">You are learning how he commits the murder.<br>He is learning how you investigate it.</p>
+      <ul class="rules">
+        <li>The murderer remembers the loops too.</li>
+        <li>He only learns what he <b>sees</b> you do — or what you show him.</li>
+        <li>If he catches you investigating, he <b>changes his plan</b> next loop: a new hiding place, a different route.</li>
+        <li>Watch without being seen. The advantage belongs to whoever reveals less.</li>
+      </ul>
+    </section>
+    <section class="tut-page">
+      <h2>Controls &amp; screen</h2>
+      <div class="keys">
+        <div><kbd>W A S D</kbd> / arrows</div><div>Walk</div>
+        <div><kbd>E</kbd></div><div>Talk / examine (when a prompt appears)</div>
+        <div><kbd>J</kbd></div><div>Journal — evidence and timeline</div>
+        <div><kbd>Accuse</kbd> button</div><div>Name the murderer (glows when you have proof)</div>
+        <div><kbd>H</kbd></div><div>Rules — and this tutorial again</div>
+        <div><kbd>Esc</kbd></div><div>Close a panel</div>
+      </div>
+      <ul class="rules">
+        <li>The <b>Next step</b> panel above the view always tells you what to do.</li>
+        <li>The <b>gold arrow</b> and the blinking dot on the <b>map</b> show where to go.</li>
+        <li>A floating <b>?</b> marks something worth examining.</li>
+      </ul>
+    </section>
+    <div id="tut-nav">
+      <button id="tut-skip">Skip</button>
+      <div id="tut-dots"></div>
+      <button id="tut-back">Back</button>
+      <button id="tut-next">Next</button>
+    </div>
+  </div>
+</div>
+
+<div id="overlay" class="hidden">
+  <div id="ov-box">
+    <div id="ov-title" class="hidden"></div>
+    <div id="ov-text"></div>
+    <div id="ov-buttons"></div>
+  </div>
+</div>
+
+<script src="lib/three.min.js"></script>
+<script src="game.js"></script>
+<script src="render3d.js"></script>
+</body>
+</html>
