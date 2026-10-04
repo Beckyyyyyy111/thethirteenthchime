@@ -377,7 +377,7 @@
     const p = L.player;
 
     // Characters
-    placeFigure(figs.player, p.x, p.y, p.face, p.moving && !paused(), dt);
+    placeFigure(figs.player, p.x, p.y, p.face, p.moving && !uiOpen(), dt);
     setCaption(figs.player, nearHatch() ? 'Watching the Study through the hatch — unseen' : '');
     for (const id in L.npcs) {
       const c = L.npcs[id], f = figs[id];
@@ -424,7 +424,7 @@
     flash = Math.max(0, flash - dt * 2.5);
 
     // Interaction ring
-    const it = paused() ? null : nearest();
+    const it = uiOpen() ? null : nearest();
     ring.visible = !!it;
     if (it) {
       ring.position.x = it.x; ring.position.z = it.y;

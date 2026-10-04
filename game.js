@@ -468,8 +468,13 @@ $('btn-h').onclick = () => toggleHelp();
 $('help-close').onclick = () => $('help').classList.add('hidden');
 
 const isOpen = (id) => !$(id).classList.contains('hidden');
+// A panel is covering the game: nothing moves, not even the player.
+function uiOpen() {
+  return isOpen('dialog') || isOpen('journal') || isOpen('overlay') || isOpen('help') || isOpen('tutorial');
+}
+// Time is stopped. After a correct accusation (L.frozen) the player can still walk to the clock.
 function paused() {
-  return isOpen('dialog') || isOpen('journal') || isOpen('overlay') || isOpen('help') || isOpen('tutorial') || L.frozen;
+  return uiOpen() || L.frozen;
 }
 
 // ---------------------------------------------------------------- audio
@@ -945,8 +950,7 @@ function updateObjective() {
 
 // ---------------------------------------------------------------- update
 function update(dt) {
-  if (paused() || !P.started) return;
-  L.t += dt;
+  if (uiOpen() || !P.started) return;
 
   // Player movement (screen-relative: W is "up" the screen, i.e. north)
   const p = L.player;
@@ -964,6 +968,9 @@ function update(dt) {
     p.room = roomAt(p.x, p.y) || p.room;
     p.face = Math.atan2(dx, dy);
   }
+
+  if (L.frozen) return;
+  L.t += dt;
 
   // Scheduled events
   for (const e of L.events) if (!e.done && L.t >= e.t) { e.done = true; e.fn(); }
@@ -1063,7 +1070,7 @@ function hud() {
   const left = Math.max(0, LOOP_LEN - L.t);
   $('hud-left').textContent = P.solved ? 'Time is holding still.' : `${Math.floor(left / 60)}:${String(Math.floor(left % 60)).padStart(2, '0')} until midnight`;
   $('hud-left').classList.toggle('urgent', !P.solved && left < 60);
-  const it = paused() ? null : nearest();
+  const it = uiOpen() ? null : nearest();
   const pr = $('prompt');
   if (it) { pr.textContent = `Press E — ${it.label}`; pr.classList.remove('hidden'); } else pr.classList.add('hidden');
 
